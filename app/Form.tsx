@@ -11,7 +11,7 @@ const NewsletterSubscriberSchema = z.object({
 type NewsletterSubscriber = z.infer<typeof NewsletterSubscriberSchema>;
 
 export default function Form() {
-  const form = useForm<NewsletterSubscriber>({
+  const { register, formState, handleSubmit } = useForm<NewsletterSubscriber>({
     resolver: zodResolver(NewsletterSubscriberSchema),
   });
 
@@ -20,18 +20,15 @@ export default function Form() {
   };
 
   return (
-    <form
-      className="flex flex-col gap-2 p-4"
-      onSubmit={form.handleSubmit(save)}
-    >
+    <form className="flex flex-col gap-2 p-4" onSubmit={handleSubmit(save)}>
       <label htmlFor="email">Email</label>
       <input
         className="text-black"
         id="email"
         type="text"
-        {...form.register("email")}
+        {...register("email")}
       />
-      <p>Felmeddelande...</p>
+      {formState.errors.email && <p>{formState.errors.email.message}</p>}
       <button type="submit">Skicka</button>
     </form>
   );
